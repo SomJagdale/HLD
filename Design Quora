@@ -1,1 +1,32 @@
 
+Estimation of scale 
+
+Questions - 10k Que/day - 
+          - 10*4 * 365*4 = 18.25M
+
+Answer - 91.25M
+
+Question size = 0.5kb
+Ans size  = 2KB 
+
+Data to store -  190 GB
+
+Q/A - Text - String - Set of characters - 1B
+
+
+
+READ & Write Heavy 
+
+
+
+From the browser requst goest to DNS syste... to get the IP address 
+
+
+browser ==> Load Balancer ====> App servers 
+                          ====> App servers 
+                          ====> App servers                           
+                          ====> App servers                                 
+                          ====> App servers                                 
+                          
+                          
+                          
