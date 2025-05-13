@@ -21,6 +21,151 @@ A **hierarchical diagramming approach** for visualizing architecture at differen
 4. **Code**: Class/function-level details (optional for high-level design).  
 **Use Case**: Simplifying communication with non-technical stakeholders.
 
+
+**Non-Functional Requirements (NFRs)** are critical to software architecture and system design. They define *how* a system should behave, rather than *what* it should do (functional requirements). Ignoring NFRs can lead to systems that are slow, insecure, or unable to scale. Below is a structured breakdown of NFRs, their categories, and how to address them in modern applications like LinkedIn, Uber, or Netflix.
+
+---
+
+### **1. What Are NFRs?**  
+NFRs specify the **quality attributes** of a system, such as:  
+- **Performance**: How fast does the system respond?  
+- **Scalability**: Can it handle growth in users/data?  
+- **Security**: Is sensitive data protected?  
+- **Reliability**: How often does the system fail?  
+- **Maintainability**: How easy is it to update the code?  
+
+---
+
+### **2. Key Categories of NFRs**  
+Here’s a prioritized list of NFRs for modern applications:
+
+| **Category**       | **Description**                                                                 | **Examples**                                                                 |
+|---------------------|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| **Performance**     | Speed, latency, throughput.                                                     | API response time < 200ms, 10K requests/sec.                               |
+| **Scalability**     | Handle growth in users, data, or transactions.                                  | Auto-scaling to 100 nodes during peak traffic.                             |
+| **Availability**    | Uptime and fault tolerance.                                                     | 99.99% uptime, multi-region redundancy.                                    |
+| **Security**        | Protect data and systems from threats.                                          | Encryption (AES-256), OAuth2, DDoS protection.                             |
+| **Reliability**     | System stability and error recovery.                                            | Retry mechanisms, transactional consistency.                              |
+| **Maintainability** | Ease of debugging, updating, and extending code.                                | Modular code, automated testing, CI/CD.                                   |
+| **Usability**       | User experience and accessibility.                                              | Mobile-responsive UI, WCAG compliance.                                     |
+| **Compliance**      | Adherence to legal/regulatory standards.                                         | GDPR, HIPAA, PCI-DSS.                                                      |
+| **Cost Efficiency** | Optimize infrastructure and operational costs.                                  | Serverless for sporadic workloads, spot instances.                         |
+
+---
+
+### **3. How to Define NFRs**  
+Use **SMART criteria** to specify NFRs:  
+- **Specific**: "API latency should be under 300ms for 95% of requests."  
+- **Measurable**: Use tools (e.g., Prometheus, New Relic) to track metrics.  
+- **Achievable**: Align with budget, timeline, and tech constraints.  
+- **Relevant**: Prioritize NFRs based on business impact (e.g., security for fintech).  
+- **Time-bound**: "Achieve 99.9% uptime by Q3."  
+
+---
+
+### **4. Strategies to Address NFRs**  
+#### **Performance**  
+- **Caching**: Redis, CDN (for static assets).  
+- **Async Processing**: Use message queues (Kafka) for non-blocking tasks.  
+- **Database Optimization**: Indexing, read replicas, connection pooling.  
+
+#### **Scalability**  
+- **Horizontal Scaling**: Kubernetes, serverless (AWS Lambda).  
+- **Sharding**: Split databases by region/user (e.g., Uber’s city-based sharding).  
+- **Stateless Design**: Store session data in Redis, not servers.  
+
+#### **Security**  
+- **Zero Trust Architecture**: mTLS, OAuth2, role-based access control (RBAC).  
+- **Encryption**: TLS 1.3 in transit, AES-256 at rest.  
+- **Vulnerability Scans**: Tools like Snyk, SonarQube.  
+
+#### **Availability**  
+- **Redundancy**: Multi-AZ deployments, active-active failover.  
+- **Chaos Engineering**: Test failures (Netflix’s Chaos Monkey).  
+- **Circuit Breakers**: Hystrix/Resilience4j to prevent cascading failures.  
+
+#### **Compliance**  
+- **Data Masking**: Anonymize sensitive data in logs.  
+- **Audit Logs**: Track access to critical systems.  
+
+---
+
+### **5. Tools & Technologies for NFRs**  
+| **NFR**         | **Tools/Technologies**                                                                 |
+|------------------|---------------------------------------------------------------------------------------|
+| **Performance**  | Apache JMeter, Gatling, New Relic, Prometheus.                                        |
+| **Scalability**  | Kubernetes (HPA), AWS Auto Scaling, Kafka.                                            |
+| **Security**     | HashiCorp Vault, Cloudflare WAF, Let’s Encrypt (TLS).                                 |
+| **Reliability**  | Istio (service mesh), AWS Route 53 (DNS failover), PostgreSQL replication.           |
+| **Observability**| Grafana, ELK Stack (Elasticsearch, Logstash, Kibana), Datadog.                        |
+
+---
+
+### **6. Real-World Examples**  
+#### **Netflix**  
+- **Scalability**: Auto-scaling microservices on AWS.  
+- **Availability**: Multi-region deployment with Chaos Monkey testing.  
+- **Performance**: Open Connect CDN for streaming content.  
+
+#### **Uber**  
+- **Reliability**: Idempotent APIs to handle duplicate ride requests.  
+- **Scalability**: Geo-sharded databases (e.g., DynamoDB Global Tables).  
+
+#### **LinkedIn**  
+- **Performance**: Asynchronous event processing with Apache Kafka.  
+- **Security**: OAuth2 and encrypted PII (personally identifiable information).  
+
+---
+
+### **7. NFR Validation Checklist**  
+1. **Define Metrics**: What’s acceptable? (e.g., 99.95% uptime).  
+2. **Test Early**: Load testing, penetration testing, chaos experiments.  
+3. **Monitor**: Use APM tools (Application Performance Monitoring).  
+4. **Document**: Include NFRs in Architecture Decision Records (ADRs).  
+
+---
+
+### **8. ISO 25010 Standard for Quality Attributes**  
+The ISO 25010 standard defines 8 quality characteristics for software:  
+1. Functional Suitability  
+2. Performance Efficiency  
+3. Compatibility  
+4. Usability  
+5. Reliability  
+6. Security  
+7. Maintainability  
+8. Portability  
+
+Use this as a framework to categorize NFRs.  
+
+---
+
+### **9. Template for Specifying NFRs**  
+```markdown
+### **NFR: [Performance/Security/Scalability]**  
+- **Requirement**: [Specific, measurable statement].  
+- **Measurement**: [Tool/metric, e.g., "API latency via Prometheus"].  
+- **Design Strategy**: [e.g., "Redis caching for frequent queries"].  
+- **Acceptance Criteria**: [e.g., "95% of requests < 300ms"].  
+```
+
+---
+
+### **10. Common Pitfalls**  
+- **Ignoring Trade-offs**: E.g., Strong consistency vs. high availability (CAP theorem).  
+- **Over-Engineering**: Adding Kafka when a simple queue suffices.  
+- **Assuming Cloud Solves Everything**: Poorly designed apps will fail even on AWS.  
+
+---
+
+### **Final Takeaway**  
+NFRs are **foundational** to software architecture. For applications like Uber or Netflix, they dictate decisions on cloud providers, database choices, and even team structure. Always:  
+1. **Prioritize NFRs early** in design.  
+2. **Quantify** them (e.g., "Support 1M concurrent users").  
+3. **Validate** through testing and monitoring.  
+
+Let me know if you want to dive deeper into a specific NFR (e.g., designing for <100ms latency)! 🔍🚀
+
 ---
 
 ### **3. Architectural Patterns**  
@@ -287,3 +432,148 @@ This framework is **adaptable**:
 - For **legacy systems**: Incrementally refactor using strangler fig pattern.  
 
 Let me know if you want a **deep dive** into any component (e.g., designing a Netflix-like recommendation engine)! 🎯
+
+
+
+When asked to design a system in an interview (e.g., "Design Uber for Pets" or "Design Netflix for Live Sports"), **structured communication** and **methodical thinking** are key. Below’s a battle-tested framework to tackle such questions, including **questions to ask the interviewer**, a **step-by-step model to structure your answer**, and **pitfalls to avoid**.
+
+---
+
+### **Step 1: Ask Clarifying Questions**  
+Start by **understanding the problem deeply**. Interviewers often leave ambiguity to test your ability to clarify scope. Ask questions like:
+
+#### **Functional Requirements**  
+- "What’s the **primary use case**? (e.g., booking rides, streaming videos, social features)"  
+- "Who are the **users**? (e.g., drivers, riders, admins)"  
+- "What are **key features**? (e.g., real-time tracking, payment processing, recommendations)"  
+
+#### **Non-Functional Requirements (NFRs)**  
+- "What’s the **scale**? (e.g., 1M daily users, 100K QPS)"  
+- "What **latency** is acceptable? (e.g., <2s API response)"  
+- "Any **compliance** needs? (e.g., GDPR, HIPAA)"  
+
+#### **Constraints**  
+- "Is this a **greenfield** project or an **existing system**?"  
+- "Any **technology preferences**? (e.g., cloud provider, database)"  
+- "What’s the **time-to-market**? (e.g., MVP vs. enterprise-grade)"  
+
+**Example**:  
+If asked to design "Instagram for Pets," clarify:  
+- Do users upload photos/videos?  
+- Is there a social graph (followers, likes)?  
+- Do we need real-time notifications?  
+
+---
+
+### **Step 2: Use a Structured Design Model**  
+Follow the **C4 + NFR Hybrid Model** (combining C4 diagrams and non-functional requirements):
+
+#### **1. Context Diagram (C4 Level 1)**  
+- Define the **system’s scope** and external dependencies.  
+- Example:  
+  - Users → Mobile App → API Gateway → Backend Services → Databases.  
+  - Third-party services (e.g., AWS S3, Payment Gateway).  
+
+#### **2. Containers Diagram (C4 Level 2)**  
+- Break down the system into **major components**:  
+  - Web Server, API Gateway, Authentication Service, Database, Cache, CDN.  
+
+#### **3. High-Level Architecture**  
+- Choose a **pattern** based on scale and needs:  
+  - **Monolith** (for simplicity) → **Microservices** (for scale).  
+  - **Event-Driven** (e.g., Kafka for real-time updates).  
+  - **Serverless** (e.g., AWS Lambda for sporadic workloads).  
+
+#### **4. Data Flow & Storage**  
+- Define **how data moves**:  
+  - User uploads → API Gateway → Auth Service → Object Storage (S3) → DB.  
+- Choose databases:  
+  - **Relational** (PostgreSQL for transactions).  
+  - **NoSQL** (MongoDB for flexible schemas).  
+  - **Cache** (Redis for frequent reads).  
+
+#### **5. Address NFRs**  
+- **Scalability**: Auto-scaling groups, sharding.  
+- **Security**: OAuth2, encryption, rate-limiting.  
+- **Availability**: Multi-AZ deployment, backups.  
+
+#### **6. APIs & Contracts**  
+- Define **key endpoints** (e.g., `POST /posts`, `GET /feed`).  
+- Use **REST/gRPC** and versioning (`/v1/posts`).  
+
+#### **7. Trade-offs**  
+- Explain **design choices**:  
+  - "Chose eventual consistency over strong consistency for higher availability."  
+  - "Used Redis caching to reduce DB load, accepting potential stale data."  
+
+---
+
+### **Step 3: Validate and Iterate**  
+- **Ask for feedback**: "Does this align with your expectations?"  
+- **Identify bottlenecks**: "Should I optimize the database layer further?"  
+- **Propose iterations**: "We could add a CDN later for global users."  
+
+---
+
+### **Example: Design "Uber for Pets"**  
+#### **Clarified Requirements**  
+- Users: Pet owners, drivers, admins.  
+- Features: Real-time tracking, payments, ride history.  
+- Scale: 10K daily rides, <1s latency for tracking.  
+
+#### **Design Breakdown**  
+1. **Context**:  
+   - Mobile App → API Gateway → Ride Matching Service → Payment Service → Notifications.  
+2. **Containers**:  
+   - Auth Service (JWT), PostgreSQL (rides), Redis (tracking cache), RabbitMQ (async payments).  
+3. **Data Flow**:  
+   - Owner requests ride → Geo-location service finds nearby drivers → WebSocket updates location.  
+4. **NFRs**:  
+   - **Scalability**: Shard rides by city (e.g., NYC rides in PostgreSQL shard 1).  
+   - **Latency**: Redis for real-time driver locations.  
+   - **Security**: OAuth2 for auth, Stripe for PCI compliance.  
+5. **Trade-offs**:  
+   - Used WebSockets over polling for real-time updates (higher cost but better UX).  
+
+---
+
+### **Step 4: Use a Mnemonic for Recall**  
+Remember **"SCALED"** to cover all bases:  
+- **S**cale: How will it handle growth?  
+- **C**omponents: Key services and their roles.  
+- **A**PI: Contracts and protocols.  
+- **L**atency: Performance optimizations.  
+- **E**rror Handling: Retries, circuit breakers.  
+- **D**ata: Storage, caching, and flows.  
+
+---
+
+### **Pitfalls to Avoid**  
+1. **Jumping into solutions** without clarifying requirements.  
+2. **Ignoring trade-offs** (e.g., consistency vs. availability).  
+3. **Overcomplicating** (e.g., Kafka for 100 users).  
+4. **Forgetting edge cases** (e.g., payment failures, network partitions).  
+
+---
+
+### **Sample Interview Script**  
+**Interviewer**: "Design a food delivery app like Zomato."  
+**You**:  
+1. **Clarify**:  
+   - "Are we focusing on real-time order tracking? Do we need a recommendation engine?"  
+   - "What’s the expected scale? 1K or 1M orders/day?"  
+2. **Structure**:  
+   - Context: Users → App → API Gateway → Services (Orders, Payments, Restaurants).  
+   - Containers: Redis (menu cache), PostgreSQL (orders), Kafka (order updates).  
+   - NFRs: Rate-limiting for restaurant search, idempotent payments.  
+3. **Trade-offs**:  
+   - "Chose eventual consistency for order status to prioritize availability."  
+
+---
+
+### **Final Tips**  
+1. **Practice**: Use platforms like [LeetCode System Design](https://leetcode.com/explore/interview/card/system-design/) or [DesignGurus](https://www.educative.io/courses/grokking-the-system-design-interview).  
+2. **Draw Diagrams**: Sketch boxes/arrows even in virtual interviews.  
+3. **Stay Calm**: It’s okay to say, "I need a moment to think."  
+
+By following this model, you’ll demonstrate **structured problem-solving** and **architectural maturity**—exactly what interviewers want! 🚀
